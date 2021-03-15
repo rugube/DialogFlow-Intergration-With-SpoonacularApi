@@ -38,7 +38,7 @@ function getRecipe (foodSearch, CloudFnResponse) {
 
 	console.log("recipe: " + foodSearch);
 
-	var pathString = "/recipes/complexSearch?apiKey=1f8444a1c6eb4342a39ce933c96d7d93&query=" + foodSearch +"&instructionsRequired=true";
+	var pathString = "/recipes/complexSearch?apiKey=1f8444a1c6eb4342a39ce933c96d7d93&query=" + foodSearch +"&addRecipeInformation=true";
 
 
 	var request = https.get({
