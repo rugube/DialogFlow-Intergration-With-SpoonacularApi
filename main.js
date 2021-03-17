@@ -55,7 +55,10 @@ function getRecipe (foodSearch, CloudFnResponse) {
 
 		response.on('end', function(){
 			var jsonData = JSON.parse(json);
-			var recipeResult = jsonData.results[0].summary;
+			var recipeResult = Object.keys(data).map(function (key) {
+				return { [key]: data[key] };
+			 });
+			   
 
 			console.log ("The recipes received are:" + recipeResult);
 
