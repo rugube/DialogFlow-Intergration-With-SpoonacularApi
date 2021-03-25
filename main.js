@@ -54,18 +54,24 @@ function getRecipe (foodSearch, CloudFnResponse) {
 		});
 
 		response.on('end', function(){
-          	var jsonData = JSON.parse(json);
-			var recipeResult = jsonData; 
+			var jsonData = JSON.parse(json);
+          	var recipeResult = jsonData; 
 
 			
             const firstResults = recipeResult.results[0];
             const secondResults = recipeResult.results[1];
             const thirdResults = recipeResult.results[2];
+          	var firstSummary = firstResults.summary.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, '').
+							 replace(/&#[0-9]+;t/gi,"").replace(/\[/g,"").replace(/\]/g,""); 
+            var secondSummary = secondResults.summary.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, '').
+							 replace(/&#[0-9]+;t/gi,"").replace(/\[/g,"").replace(/\]/g,""); 
+            var thirdSummary = thirdResults.summary.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, '').
+							 replace(/&#[0-9]+;t/gi,"").replace(/\[/g,"").replace(/\]/g,""); 
             
 
-            const {title:firstReply,summary:firstSummary} = firstResults;
-            const {title:secondReply,summary:secondSummary} = secondResults;
-            const {title:thirdReply,summary:thirdSummary} = thirdResults;
+            const {title:firstReply} = firstResults;
+            const {title:secondReply} = secondResults;
+            const {title:thirdReply} = thirdResults;
           	
 
 			console.log ("The recipes received are: " + recipeResult);
