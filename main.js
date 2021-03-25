@@ -26,7 +26,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
 const parameters = request.body.queryResult.parameters;
 
-var foodSearch = parameters['food'];
+var foodSearch = parameters.food;
 
 getRecipe (foodSearch,response);
 
@@ -38,7 +38,7 @@ function getRecipe (foodSearch, CloudFnResponse) {
 
 	console.log("recipe: " + foodSearch);
 
-	var pathString = "/recipes/complexSearch?apiKey=1f8444a1c6eb4342a39ce933c96d7d93&query=" + foodSearch +"&addRecipeInformation=true";
+	var pathString = `/recipes/complexSearch?apiKey=3132a54596b442539d8184004fd42bfd&query=${foodSearch}&instructionsRequired=true&addRecipeInformation=true&number=3`;
 
 
 	var request = https.get({
@@ -54,16 +54,23 @@ function getRecipe (foodSearch, CloudFnResponse) {
 		});
 
 		response.on('end', function(){
-			var jsonData = JSON.parse(json);
-			var recipeResult = Object.keys(data).map(function (key) {
-				return { [key]: data[key] };
-			 });
-			   
+          	var jsonData = JSON.parse(json);
+			var recipeResult = jsonData; 
 
-			console.log ("The recipes received are:" + recipeResult);
+			
+            const firstResults = recipeResult.results[0];
+            const secondResults = recipeResult.results[1];
+            const thirdResults = recipeResult.results[2];
+            
 
-			var chat = "The recipes available for " + foodSearch + 
-			" are " + recipeResult;
+            const {title:firstReply,summary:firstSummary} = firstResults;
+            const {title:secondReply,summary:secondSummary} = secondResults;
+            const {title:thirdReply,summary:thirdSummary} = thirdResults;
+          	
+
+			console.log ("The recipes received are: " + recipeResult);
+
+			var chat = `The recipes available for  ${foodSearch} are: \n ${firstReply} : ${firstSummary} \n \n ${secondReply}: ${secondSummary} \n \n ${thirdReply}: ${thirdSummary}` ;
 
 			CloudFnResponse.send(buildChatResponse(chat));
 
